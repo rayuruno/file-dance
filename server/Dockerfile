@@ -6,7 +6,7 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 
-RUN go build .
+RUN go build -o file-dance .
 
 FROM alpine:3.16 AS runtime
 
