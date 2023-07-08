@@ -20,4 +20,4 @@ jobs:
       - name: Release client
         uses: softprops/action-gh-release@v1
         with:
-          files: build/dance-*.tar.gz
+          files: client/build/dance-*.tar.gz
