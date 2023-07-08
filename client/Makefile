@@ -31,12 +31,12 @@ build-all: build-linux build-osx
 .PHONY: package-linux
 package-linux:
 	@echo "Packaging Linux binary..."
-	tar -C $(BUILD_DIR) -zcf $(BUILD_DIR)/$(BINARY_NAME)-$(APP_VERSION)-linux-amd64.tar.gz $(BINARY_NAME)-linux-amd64
+	tar -C $(BUILD_DIR) -zcf $(BUILD_DIR)/$(BINARY_NAME)-linux-amd64.tar.gz $(BINARY_NAME)-linux-amd64
 
 .PHONY: package-osx
 package-osx:
 	@echo "Packaging OSX binary..."
-	tar -C $(BUILD_DIR) -zcf $(BUILD_DIR)/$(BINARY_NAME)-$(APP_VERSION)-darwin-amd64.tar.gz $(BINARY_NAME)-darwin-amd64
+	tar -C $(BUILD_DIR) -zcf $(BUILD_DIR)/$(BINARY_NAME)-darwin-amd64.tar.gz $(BINARY_NAME)-darwin-amd64
 
 .PHONY: package-all
 package-all: package-linux package-osx
