@@ -1,0 +1,44 @@
+app = "file-dance"
+
+primary_region = "ams"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
+
+[experimental]
+  auto_rollback = true
+
+[processes]
+  ssh = "./file-dance ssh"
+  http = "./file-dance http"
+
+[[services]]
+  processes = ["ssh"]
+  internal_port = 2222
+  protocol = "tcp"
+
+  [[services.ports]]
+  port = 2222
+
+[[services]]
+  processes = ["http"]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [services.concurrency]
+  hard_limit = 5000
+  soft_limit = 4000
+  type = "connections"
+
+  [[services.ports]]
+  handlers = [ "http" ]
+  port = 80
+
+  [[services.ports]]
+  handlers = [ "http", "tls" ]
+  port = 443
+
+  [[services.tcp_checks]]
+  grace_period  = "1s"
+  interval = "15s"
+  restart_limit = 0
+  timeout = "2s"

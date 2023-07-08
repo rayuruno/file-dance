@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello</title>
+    <script>
+      async function ls(p) {
+        let res = await fetch(p,{headers:{'Content-Type':"application/json"}})
+        return res.json()
+      }
+      async function load(el,p) {
+        let l = await ls(p)
+        renderList(l, el.querySelector("ul"))
+      }
+      function renderItem(f) {
+        if (f.dir) {
+          return `<li onclick="load(this,'${f.path}')">${f.name}<ul></ul></li>`  
+        }
+        return `<li><a href="${f.path}">${f.name}</a></li>`
+      }
+      function renderList(l, el) {
+        el.innerHTML = l.map(renderItem).join("")
+      }
+    </script>
+  </head>
+  <body>
+    <main id="app">
+      <ul></ul>
+    </main>
+    <script>load(app, "/")</script>
+  </body>
+</html>
