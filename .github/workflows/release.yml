@@ -1,4 +1,4 @@
-name: Build
+name: Release
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build on tag
+    name: Release on tag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -15,11 +15,9 @@ jobs:
 
       - name: Build client
         working-directory: ./client
-        run: |
-          make all
+        run: make all
 
       - name: Release client
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ./client/build/dance-*.tar.gz
