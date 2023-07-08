@@ -26,6 +26,10 @@ func main() {
 	httpDir := flag.String("dir", "", "dir")
 	flag.Parse()
 
+	if *user == "" || *password == "" {
+		log.Fatal("credentials missing")
+	}
+
 	// var hostKey ssh.PublicKey
 	config := &ssh.ClientConfig{
 		User: *user,
