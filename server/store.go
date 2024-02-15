@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/redis/go-redis/v9"
@@ -24,6 +25,17 @@ func init() {
 
 func userExists(user string) bool {
 	return rdb.Exists(rctx, proxyKey(user)).Val() == 1
+}
+
+func setPassword(user, password string) (bool, error) {
+	if len(password) < 1 {
+		return false, fmt.Errorf("password cannot be blank")
+	}
+	phash, err := hashPassword(password)
+	if err != nil {
+		return false, err
+	}
+	return rdb.SetNX(rctx, passwordKey(user), phash, 0).Val(), nil
 }
 
 func getPassword(user string) string {

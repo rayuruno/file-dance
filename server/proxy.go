@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -34,11 +35,35 @@ func proxyHandler() http.Handler {
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user := parseSubdomain(r.Host)
+
+		if r.Method == http.MethodPost {
+			password, err := io.ReadAll(r.Body)
+			defer r.Body.Close()
+			if err != nil {
+				log.Println(err)
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			ok, err := setPassword(user, string(password))
+			if err != nil {
+				log.Println(err)
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			if !ok {
+				w.WriteHeader(http.StatusConflict)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 		if !(r.Method == http.MethodGet || r.Method == http.MethodHead) {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
-		user := parseSubdomain(r.Host)
+
 		proxyAddr := getProxyAddress(user)
 		if proxyAddr == "" {
 			w.WriteHeader(http.StatusNotFound)
