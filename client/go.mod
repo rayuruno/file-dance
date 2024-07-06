@@ -3,7 +3,7 @@ module github.com/rayuruno/file-dance/client
 go 1.20
 
 require (
-	github.com/gofiber/fiber/v2 v2.52.1
+	github.com/gofiber/fiber/v2 v2.52.5
 	golang.org/x/crypto v0.17.0
 )
 
